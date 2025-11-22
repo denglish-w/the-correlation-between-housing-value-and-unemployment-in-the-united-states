@@ -8,8 +8,8 @@ class DataCleaner:
     def __init__(self, housing_data_file_path: str, unemployment_data_file_path: str):
         raw_data_housing = pd.read_csv(housing_data_file_path)
         raw_data_unemployment = pd.read_csv(unemployment_data_file_path, skiprows=2).dropna()
-        self.clean_unemployment_data = self.full_clean(raw_data_unemployment)
-        self.clean_housing_data = raw_data_housing
+        self.clean_unemployment_data = self.unemployment_full_clean(raw_data_unemployment)
+        self.clean_housing_data = self.housing_full_clean(raw_data_housing)
         
     
     @staticmethod
@@ -23,8 +23,11 @@ class DataCleaner:
             pd.DataFrame: dataframe with the changed columns.
         """
         columns_to_rename = {
-        "Area FIPS Code" : "FIPS Code",
-        "ST FIPS Code" : "State FIPS Code",
+        "Area FIPS Code" : "FIPS_Code",
+        "ST FIPS Code" : "State_FIPS_Code",
+        "Civilian Labor Force" : "Civilian_Labor_Force",
+        "Unemployment Rate" : "Unemployment_Rate",
+        "LAUS Code" : "LAUS_Code"
         }
         return df_to_clean.rename(columns=columns_to_rename)
 
@@ -45,7 +48,7 @@ class DataCleaner:
     @staticmethod
     def unemployment_object_columns_to_int64(raw_data: pd.DataFrame) -> pd.DataFrame:
         df_to_clean = raw_data.copy()
-        object_columns = ['Employment', 'Unemployment', "Unemployment Rate", "Civilian Labor Force"]
+        object_columns = ['Employment', 'Unemployment', "Unemployment_Rate", "Civilian_Labor_Force"]
         for column in object_columns:
             df_to_clean[column] = (df_to_clean[column]
                                .astype(str)
@@ -57,17 +60,34 @@ class DataCleaner:
     @staticmethod
     def unemployment_float_cols_to_int64(raw_data: pd.DataFrame) -> pd.DataFrame:
         data_to_clean = raw_data.copy()
-        float_columns = ['State FIPS Code', 'FIPS Code', 'Year', 'Month']
+        float_columns = ['State_FIPS_Code', 'FIPS_Code', 'Year', 'Month']
         for column in float_columns:
             data_to_clean[column] = data_to_clean[column].astype(int)
         return data_to_clean
     
-    def full_clean(self, unemployment_dataframe: pd.DataFrame):
+    @staticmethod
+    def rename_housing_value_columns(df_to_clean: pd.DataFrame) -> pd.DataFrame:
+        columns_to_rename = {
+        "index_nsa" : "Not_Seasonally_Adjusted_Index",
+        "index_sa" : "Seasonally_Adjusted_Index",
+        "yr" : "Year",
+        "qtr" : "Quarter",
+        "metro_name" : "Metro_Name",
+        "cbsa" : "CBSA"
+        }
+        return df_to_clean.rename(columns=columns_to_rename)
+
+        
+    def unemployment_full_clean(self, unemployment_dataframe: pd.DataFrame):
         renamed_columns = self.rename_unemployment_columns(unemployment_dataframe)
         no_nas = self.drop_n_values_for_unemployment_df(renamed_columns)
         object_now_int_columns = self.unemployment_object_columns_to_int64(no_nas)
         float_now_int_columns = self.unemployment_float_cols_to_int64(object_now_int_columns)
         return float_now_int_columns
+    
+    def housing_full_clean(self, housing_dataframe: pd.DataFrame) -> pd.DataFrame:
+        renamed_housing_columns = self.rename_housing_value_columns(housing_dataframe)
+        return renamed_housing_columns
     
     # load raw csv file from file path    
     # def load_raw_csv(self, filepath):
