@@ -1,11 +1,15 @@
 import pandas as pd
 
+# FINISH WRITING THE TEXT THAT DESCRIBES THE FUNCTIONS YOU HAVE CREATED
+
+
 class DataCleaner:
 
     def __init__(self, housing_data_file_path: str, unemployment_data_file_path: str):
         raw_data_housing = pd.read_csv(housing_data_file_path)
         raw_data_unemployment = pd.read_csv(unemployment_data_file_path, skiprows=2).dropna()
         self.clean_unemployment_data = self.full_clean(raw_data_unemployment)
+        self.clean_housing_data = raw_data_housing
         
     
     @staticmethod
