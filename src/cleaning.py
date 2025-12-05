@@ -88,12 +88,3 @@ class DataCleaner:
     def housing_full_clean(self, housing_dataframe: pd.DataFrame) -> pd.DataFrame:
         renamed_housing_columns = self.rename_housing_value_columns(housing_dataframe)
         return renamed_housing_columns
-    
-    # load raw csv file from file path    
-    # def load_raw_csv(self, filepath):
-    #         try:
-    #             df = pd.read_csv(filepath)
-    #             return df   
-    #         except FileNotFoundError:
-    #             print(f"Error, file not found: {FileNotFoundError}")
-    #             return None
