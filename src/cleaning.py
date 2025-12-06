@@ -1,7 +1,5 @@
 import pandas as pd
 
-# FINISH WRITING THE TEXT THAT DESCRIBES THE FUNCTIONS YOU HAVE CREATED
-
 
 class DataCleaner:
 
@@ -13,14 +11,14 @@ class DataCleaner:
         
     
     @staticmethod
-    def rename_unemployment_columns(df_to_clean: pd.DataFrame) -> pd.DataFrame: 
+    def rename_unemployment_columns(unemployment_dataset: pd.DataFrame) -> pd.DataFrame: 
         """
-        This function changes the names of the columns on the unemployment dataset.
-        Args: 
-            df_to_clean: is the dataframe with the columns to change
-                
-        Return:
-            pd.DataFrame: dataframe with the changed columns.
+        Changes the names of the columns on the unemployment dataset.
+        
+        :param unemployment_dataset: The unemployment dataset from the Bureau of Labor Statistics found in the README.md.
+        :type unemployment_dataset: pd.DataFrame
+        :return:
+        :rtype: DataFrame
         """
         columns_to_rename = {
         "Area FIPS Code" : "FIPS_Code",
@@ -29,12 +27,20 @@ class DataCleaner:
         "Unemployment Rate" : "Unemployment_Rate",
         "LAUS Code" : "LAUS_Code"
         }
-        return df_to_clean.rename(columns=columns_to_rename)
+        return unemployment_dataset.rename(columns=columns_to_rename)
 
-    # drops rows where there is found an '(n)' value
+   
     @staticmethod
-    def drop_n_values_for_unemployment_df(raw_data: pd.DataFrame) -> pd.DataFrame:
-        df_to_clean = raw_data.copy()
+    def drop_n_values_for_unemployment_df(unemployment_dataset: pd.DataFrame) -> pd.DataFrame:
+        """
+        Drops rows with '(n)' value in the unemployment dataset.
+        
+        :param unemployment_dataset: The unemployment dataset from the Bureau of Labor Statistics found in the README.md.
+        :type unemployment_dataset: pd.DataFrame
+        :return:
+        :rtype: DataFrame
+        """
+        df_to_clean = unemployment_dataset.copy()
         column_names = df_to_clean.columns
         for column in column_names:
             if df_to_clean[column].dtype == 'object':
@@ -46,8 +52,17 @@ class DataCleaner:
 
     # changes all object columns to int64 type
     @staticmethod
-    def unemployment_object_columns_to_int64(raw_data: pd.DataFrame) -> pd.DataFrame:
-        df_to_clean = raw_data.copy()
+    def unemployment_object_columns_to_int64(unemployment_dataset: pd.DataFrame) -> pd.DataFrame:
+        """
+        Typecasts appropriate columns in the unemployment dataset to int64 in the unemployment dataset.
+        
+        :param unemployment_dataset: The unemployment dataset from the Bureau of Labor Statistics found in the README.md.
+        :type unemployment_dataset: pd.DataFrame
+        :return:
+        :rtype: DataFrame
+        """
+        
+        df_to_clean = unemployment_dataset.copy()
         object_columns = ['Employment', 'Unemployment', "Unemployment_Rate", "Civilian_Labor_Force"]
         for column in object_columns:
             df_to_clean[column] = (df_to_clean[column]
@@ -58,15 +73,31 @@ class DataCleaner:
         return df_to_clean
     
     @staticmethod
-    def unemployment_float_cols_to_int64(raw_data: pd.DataFrame) -> pd.DataFrame:
-        data_to_clean = raw_data.copy()
+    def unemployment_float_cols_to_int64(unemployment_dataset: pd.DataFrame) -> pd.DataFrame:
+        """
+        Typecasts appropriate float columns to int64 in the unemployment dataset.
+        
+        :param unemployment_dataset: The unemployment dataset from the Bureau of Labor Statistics found in the README.md.
+        :type unemployment_dataset: pd.DataFrame
+        :return: 
+        :rtype: DataFrame
+        """
+        data_to_clean = unemployment_dataset.copy()
         float_columns = ['State_FIPS_Code', 'FIPS_Code', 'Year', 'Month']
         for column in float_columns:
             data_to_clean[column] = data_to_clean[column].astype(int)
         return data_to_clean
     
     @staticmethod
-    def rename_housing_value_columns(df_to_clean: pd.DataFrame) -> pd.DataFrame:
+    def rename_housing_value_columns(housing_value_dataset: pd.DataFrame) -> pd.DataFrame:
+        """
+        Renames columns in the housing value dataset.
+        
+        :param housing_value_dataset: The housing value index dataset from the Federal Housing Finance Agency found in the README.md.
+        :type housing_value_dataset: pd.DataFrame
+        :return:
+        :rtype: DataFrame
+        """
         columns_to_rename = {
         "index_nsa" : "Not_Seasonally_Adjusted_Index",
         "index_sa" : "Seasonally_Adjusted_Index",
@@ -75,11 +106,18 @@ class DataCleaner:
         "metro_name" : "Metro_Name",
         "cbsa" : "CBSA"
         }
-        return df_to_clean.rename(columns=columns_to_rename)
+        return housing_value_dataset.rename(columns=columns_to_rename)
 
         
-    def unemployment_full_clean(self, unemployment_dataframe: pd.DataFrame):
-        renamed_columns = self.rename_unemployment_columns(unemployment_dataframe)
+    def unemployment_full_clean(self, raw_unemployment_data: pd.DataFrame):
+        """
+        Serves as the wrapper function that cleans the unemployment dataset.
+        
+        :param self:
+        :param raw_unemployment_data: The unemployment dataset from the Bureau of Labor Statistics found in the README.md.
+        :type raw_unemployment_data: pd.DataFrame
+        """
+        renamed_columns = self.rename_unemployment_columns(raw_unemployment_data)
         no_nas = self.drop_n_values_for_unemployment_df(renamed_columns)
         object_now_int_columns = self.unemployment_object_columns_to_int64(no_nas)
         float_now_int_columns = self.unemployment_float_cols_to_int64(object_now_int_columns)
