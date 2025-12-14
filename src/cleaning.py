@@ -124,5 +124,12 @@ class DataCleaner:
         return float_now_int_columns
     
     def housing_full_clean(self, housing_dataframe: pd.DataFrame) -> pd.DataFrame:
+        """
+        Serves as the wrapper function that cleans the housing dataset.
+        
+        :param self:
+        :param housing_dataframe: The housing dataset from the Federal Housing Finance Agency found in the README.md. 
+        :type housing_dataframe: pd.DataFrame
+        """
         renamed_housing_columns = self.rename_housing_value_columns(housing_dataframe)
         return renamed_housing_columns
