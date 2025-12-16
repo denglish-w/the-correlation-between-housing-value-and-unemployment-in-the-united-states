@@ -1,7 +1,9 @@
 # The Correlation Between Housing Value and the Unemployment Rates in the United States
 
-## Project Overview
-This project analyzes the economic relationship between the housing market and labor market stability in the United States. Specifically, it explores the correlation between the **Housing Price Index (HPI)** and the **Unemployment Rate** across various Core-Based Statistical Areas (CBSAs). By integrating data from the Federal Housing Finance Agency (FHFA) and the Bureau of Labor Statistics (BLS), this analysis determines there is a relationship between the housing market and the labor rates.
+## Abstract
+Upon first reflection, it seems that there would some correlation between unemployment and housing value. If unemployment rises, less people may be able to afford the home they live in, leading to the person in question selling their home. With more houses on the market, housing value may drop. However, even if the one who is unemployed does not sell their house, they may not be able to afford up-keep on the house. This too would cause a drop in housing value.
+
+The Bureau of Labor Statistics (BLS) and Federal Housing Finance Agency (FHFA) publish datasets that allow this theory to be tested. Nationally, it is found that there is a weak negative correlation between the unemployment rate and housing value of -0.28. When correlations are grouped by metro area, there are some signifcant outliers where the correlation is much stronger or much weaker. A time-series analysis is performed on a four select metro areas, which include the two minimal and maximal outliers, and two middling metro areas closer to the national average. Local correlation and housing value are plotted to visualize their relationship over time. The graphs suggest that factors other than unemployment often drive housing prices.
 
 ## Main Questions & Findings
 
